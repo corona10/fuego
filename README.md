@@ -13,7 +13,7 @@ fuego is a library for automatically generating command line interfaces (CLIs) f
 * fuego helps with exploring existing code or turning other people's code into a CLI.
 
 ## Installation
-```
+```bash
 go get github.com/corona10/fuego
 ```
 
@@ -25,6 +25,25 @@ go get github.com/corona10/fuego
 [![asciicast](https://asciinema.org/a/173782.png)](https://asciinema.org/a/173782)
 
 ## [Examples](/_examples)
+
+```go
+package main
+
+import (
+	"fmt"
+
+	"github.com/corona10/fuego"
+)
+
+func Add(a int, b int) (int, int) {
+	fmt.Println(a, b)
+	return a + b, 2*a + b
+}
+
+func main() {
+	fuego.Fire(Add)
+}
+```
 
 ```go
 package main
