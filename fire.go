@@ -14,6 +14,7 @@ import (
 	"strings"
 )
 
+// Config is a configuration struct for gofire
 type Config struct {
 	PrintReturnValuesOff bool
 }
@@ -32,13 +33,13 @@ func Fire(target interface{}, config ...Config) ([]reflect.Value, error) {
 	}
 
 	if typ.Kind() == reflect.Func {
-		func_name := getFunctionName(target)
+		funcName := getFunctionName(target)
 		f := reflect.ValueOf(target)
-		num_params := typ.NumIn()
-		in := make([]reflect.Value, num_params)
-		info[func_name] = typ
+		numParams := typ.NumIn()
+		in := make([]reflect.Value, numParams)
+		info[funcName] = typ
 
-		if len(args) != num_params+1 {
+		if len(args) != numParams+1 {
 			printFunctionHelp(typ, args)
 			return nil, errors.New("Invalid command")
 		}
@@ -50,16 +51,16 @@ func Fire(target interface{}, config ...Config) ([]reflect.Value, error) {
 			t := f.Type().In(idx)
 			switch t.Kind() {
 			case reflect.Int:
-				param_value, _ := strconv.Atoi(param)
-				arg := reflect.ValueOf(param_value)
+				paramValue, _ := strconv.Atoi(param)
+				arg := reflect.ValueOf(paramValue)
 				in[idx] = arg
 			case reflect.Float32:
-				param_value, _ := strconv.ParseFloat(param, 32)
-				arg := reflect.ValueOf(param_value)
+				paramValue, _ := strconv.ParseFloat(param, 32)
+				arg := reflect.ValueOf(paramValue)
 				in[idx] = arg
 			case reflect.Float64:
-				param_value, _ := strconv.ParseFloat(param, 64)
-				arg := reflect.ValueOf(param_value)
+				paramValue, _ := strconv.ParseFloat(param, 64)
+				arg := reflect.ValueOf(paramValue)
 				in[idx] = arg
 			case reflect.String:
 				in[idx] = reflect.ValueOf(param)
@@ -92,16 +93,16 @@ func Fire(target interface{}, config ...Config) ([]reflect.Value, error) {
 			t := method.In(idx + 1)
 			switch t.Kind() {
 			case reflect.Int:
-				param_value, _ := strconv.Atoi(param)
-				arg := reflect.ValueOf(param_value)
+				paramValue, _ := strconv.Atoi(param)
+				arg := reflect.ValueOf(paramValue)
 				in[idx] = arg
 			case reflect.Float32:
-				param_value, _ := strconv.ParseFloat(param, 32)
-				arg := reflect.ValueOf(param_value)
+				paramValue, _ := strconv.ParseFloat(param, 32)
+				arg := reflect.ValueOf(paramValue)
 				in[idx] = arg
 			case reflect.Float64:
-				param_value, _ := strconv.ParseFloat(param, 64)
-				arg := reflect.ValueOf(param_value)
+				paramValue, _ := strconv.ParseFloat(param, 64)
+				arg := reflect.ValueOf(paramValue)
 				in[idx] = arg
 			case reflect.String:
 				in[idx] = reflect.ValueOf(param)
@@ -118,20 +119,20 @@ func Fire(target interface{}, config ...Config) ([]reflect.Value, error) {
 }
 
 func printCallResult(rets []reflect.Value) {
-	var rets_values []string
+	var retValues []string
 	if len(rets) > 0 {
 		// TODO (corona10): Support more features.
 		for _, ret := range rets {
 			switch ret.Kind() {
 			case reflect.Int, reflect.Int8, reflect.Int16, reflect.Int32, reflect.Int64:
-				rets_values = append(rets_values, strconv.FormatInt(ret.Int(), 10))
+				retValues = append(retValues, strconv.FormatInt(ret.Int(), 10))
 			case reflect.String:
-				rets_values = append(rets_values, ret.String())
+				retValues = append(retValues, ret.String())
 			case reflect.Float32, reflect.Float64:
-				rets_values = append(rets_values, strconv.FormatFloat(ret.Float(), 'f', -1, 64))
+				retValues = append(retValues, strconv.FormatFloat(ret.Float(), 'f', -1, 64))
 			}
 		}
-		fmt.Println(strings.Join(rets_values, " "))
+		fmt.Println(strings.Join(retValues, " "))
 	}
 }
 
@@ -167,7 +168,7 @@ func printMethodHelp(info map[string]reflect.Type, args []string) {
 		commands = append(commands, strings.Join(command, " "))
 	}
 
-	show_commands := strings.Join(commands, "\n")
-	msg = fmt.Sprintf("%s%s\n", msg, show_commands)
+	showCommands := strings.Join(commands, "\n")
+	msg = fmt.Sprintf("%s%s\n", msg, showCommands)
 	fmt.Printf(msg)
 }
