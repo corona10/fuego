@@ -1,7 +1,10 @@
+// Package gofire is a library for automatically generating command line interfaces (CLIs)
+// from function and struct.
+package gofire
+
 // Copyright 2018 The gofire Authors. All rights reserved.
 // Use of this source code is governed by a BSD-style
 // license that can be found in the LICENSE file.
-package gofire
 
 import (
 	"errors"
@@ -138,8 +141,8 @@ func printCallResult(rets []reflect.Value) {
 
 func getFunctionName(fn interface{}) string {
 	name := runtime.FuncForPC(reflect.ValueOf(fn).Pointer()).Name()
-	func_names := strings.Split(name, ".")
-	return func_names[len(func_names)-1]
+	funcNames := strings.Split(name, ".")
+	return funcNames[len(funcNames)-1]
 }
 
 func printFunctionHelp(info reflect.Type, args []string) {
