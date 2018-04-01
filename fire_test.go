@@ -42,12 +42,12 @@ func TestFunc1(t *testing.T) {
 		t.Errorf("%d return value expected, got %d", expectedNumOut, len(ret))
 	}
 
-	expected_ret1, expected_ret2 := Func1(3, 5)
-	got_ret1 := int(ret[0].Int())
-	got_ret2 := int(ret[1].Int())
-	if expected_ret1 != got_ret1 || expected_ret2 != got_ret2 {
-		t.Errorf("(%v, %v) is expected but got (%v, %v)", expected_ret1,
-			expected_ret2, got_ret1, got_ret2)
+	expectedRet1, expectedRet2 := Func1(3, 5)
+	gotRet1 := int(ret[0].Int())
+	gotRet2 := int(ret[1].Int())
+	if expectedRet1 != gotRet1 || expectedRet2 != gotRet2 {
+		t.Errorf("(%v, %v) is expected but got (%v, %v)", expectedRet1,
+			expectedRet2, gotRet1, gotRet2)
 	}
 	if err != nil {
 		t.Errorf("Error is not expected but got %v", err)
@@ -62,12 +62,12 @@ func TestFunc2(t *testing.T) {
 		t.Errorf("%d return value expected, got %d", expectedNumOut, len(ret))
 	}
 
-	expected_ret1, expected_ret2 := Func2(3.5, 5.4)
-	got_ret1 := ret[0].Float()
-	got_ret2 := ret[1].Float()
-	if expected_ret1 != got_ret1 || expected_ret2 != got_ret2 {
-		t.Errorf("(%v, %v) is expected but got (%v, %v)", expected_ret1,
-			expected_ret2, got_ret1, got_ret2)
+	expectedRet1, expectedRet2 := Func2(3.5, 5.4)
+	gotRet1 := ret[0].Float()
+	gotRet2 := ret[1].Float()
+	if expectedRet1 != gotRet1 || expectedRet2 != gotRet2 {
+		t.Errorf("(%v, %v) is expected but got (%v, %v)", expectedRet1,
+			expectedRet2, gotRet1, gotRet2)
 	}
 	if err != nil {
 		t.Errorf("Error is not expected but got %v", err)
@@ -83,10 +83,10 @@ func TestSampleStruct1(t *testing.T) {
 		t.Errorf("%d return value expected, got %d", expectedNumOut, len(ret))
 	}
 
-	expected_ret := s.Add(3, 5)
-	got_ret := int(ret[0].Int())
-	if expected_ret != got_ret {
-		t.Errorf("(%v) is expected but got (%v)", expected_ret, got_ret)
+	expectedRet := s.Add(3, 5)
+	gotRet := int(ret[0].Int())
+	if expectedRet != gotRet {
+		t.Errorf("(%v) is expected but got (%v)", expectedRet, gotRet)
 	}
 	if err != nil {
 		t.Errorf("Error is not expected but got %v", err)
@@ -102,10 +102,10 @@ func TestSampleStruct2(t *testing.T) {
 		t.Errorf("%d return value expected, got %d", expectedNumOut, len(ret))
 	}
 
-	expected_ret := s.Minus(3, 5)
-	got_ret := int(ret[0].Int())
-	if expected_ret != got_ret {
-		t.Errorf("(%v) is expected but got (%v)", expected_ret, got_ret)
+	expectedRet := s.Minus(3, 5)
+	gotRet := int(ret[0].Int())
+	if expectedRet != gotRet {
+		t.Errorf("(%v) is expected but got (%v)", expectedRet, gotRet)
 	}
 	if err != nil {
 		t.Errorf("Error is not expected but got %v", err)
@@ -121,10 +121,10 @@ func TestSampleStruct3(t *testing.T) {
 		t.Errorf("%d return value expected, got %d", expectedNumOut, len(ret))
 	}
 
-	expected_ret := s.String("hello, world")
-	got_ret := ret[0].String()
-	if expected_ret != got_ret {
-		t.Errorf("(%v) is expected but got (%v)", expected_ret, got_ret)
+	expectedRet := s.String("hello, world")
+	gotRet := ret[0].String()
+	if expectedRet != gotRet {
+		t.Errorf("(%v) is expected but got (%v)", expectedRet, gotRet)
 	}
 	if err != nil {
 		t.Errorf("Error is not expected but got %v", err)
