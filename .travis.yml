@@ -6,27 +6,6 @@ go:
   - 1.9.x
   - 1.10.x
   - master
-
-sudo: required
-dist: trusty
-
-addons:
-  apt:
-    packages:
-      - python-dev
-      - python3-pip
-
-cache: pip
-
-before_install:
-  - go get -v
-  - sudo -H pip3 install -U pip
-  - sudo -H pip3 install -U six>=1.9.0 # fix for coala breakage on trusty
-  - sudo -H pip3 install -U coala-bears
-
-script:
-  - coala --ci
-  - go test -v -coverprofile=/dev/stdout
-
+  
 notification:
   email: false
