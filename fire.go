@@ -116,14 +116,14 @@ func printFunctionHelp(info reflect.Type, args []string) {
 		params = append(params, info.In(i).String())
 	}
 
-	msg := fmt.Sprintf("Usage:%s %s\n", file, strings.Join(params, " "))
+	msg := fmt.Sprintf("Usage of %s:\n%s %s\n", file, file, strings.Join(params, " "))
 	fmt.Printf(msg)
 }
 
 func printMethodHelp(info map[string]Sym, args []string) {
 	var commands []string
 	file := filepath.Base(args[0])
-	msg := fmt.Sprintf("Usage: %s\n", file)
+	msg := fmt.Sprintf("Usage of %s:\n", file)
 	for key, value := range info {
 		var command []string
 		command = append(command, file)
