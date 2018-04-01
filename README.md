@@ -24,7 +24,7 @@ go get github.com/corona10/gofire
 
 [![asciicast](https://asciinema.org/a/173759.png)](https://asciinema.org/a/173759)
 
-## [Examples](/examples)
+## [Examples](/_examples)
 
 ```go
 package main
