@@ -18,6 +18,10 @@ func Func2(a, b float64) (float64, float64) {
 	return a + b, a - b
 }
 
+func Func3(a, b float32) (float32, float32) {
+	return a + b, a - b
+}
+
 type SampleStruct struct {
 	Name string
 }
@@ -35,8 +39,9 @@ func (s SampleStruct) String(str string) string {
 }
 
 func TestFunc1(t *testing.T) {
+	config := Config{PrintReturnValuesOff: true}
 	os.Args = []string{"TestFunc1", "3", "5"}
-	ret, err := Fire(Func1)
+	ret, err := Fire(Func1, config)
 	expectedNumOut := reflect.ValueOf(Func1).Type().NumOut()
 	if len(ret) != expectedNumOut {
 		t.Errorf("%d return value expected, got %d", expectedNumOut, len(ret))
@@ -54,10 +59,23 @@ func TestFunc1(t *testing.T) {
 	}
 }
 
+func TestWrongFunc(t *testing.T) {
+	os.Args = []string{"TestFunc1", "3"}
+	ret, err := Fire(Func1)
+	expectedNumOut := 0
+	if len(ret) != expectedNumOut {
+		t.Errorf("%d return value expected, got %d", expectedNumOut, len(ret))
+	}
+
+	if err == nil || err.Error() != "Invalid command" {
+		t.Errorf("Error is not expected but got %v", err)
+	}
+}
+
 func TestFunc2(t *testing.T) {
 	os.Args = []string{"TestFunc2", "3.5", "5.4"}
 	ret, err := Fire(Func2)
-	expectedNumOut := reflect.ValueOf(Func1).Type().NumOut()
+	expectedNumOut := reflect.ValueOf(Func2).Type().NumOut()
 	if len(ret) != expectedNumOut {
 		t.Errorf("%d return value expected, got %d", expectedNumOut, len(ret))
 	}
@@ -65,6 +83,26 @@ func TestFunc2(t *testing.T) {
 	expectedRet1, expectedRet2 := Func2(3.5, 5.4)
 	gotRet1 := ret[0].Float()
 	gotRet2 := ret[1].Float()
+	if expectedRet1 != gotRet1 || expectedRet2 != gotRet2 {
+		t.Errorf("(%v, %v) is expected but got (%v, %v)", expectedRet1,
+			expectedRet2, gotRet1, gotRet2)
+	}
+	if err != nil {
+		t.Errorf("Error is not expected but got %v", err)
+	}
+}
+
+func TestFunc3(t *testing.T) {
+	os.Args = []string{"TestFunc3", "3.5", "5.4"}
+	ret, err := Fire(Func3)
+	expectedNumOut := reflect.ValueOf(Func3).Type().NumOut()
+	if len(ret) != expectedNumOut {
+		t.Errorf("%d return value expected, got %d", expectedNumOut, len(ret))
+	}
+
+	expectedRet1, expectedRet2 := Func3(3.5, 5.4)
+	gotRet1 := float32(ret[0].Float())
+	gotRet2 := float32(ret[1].Float())
 	if expectedRet1 != gotRet1 || expectedRet2 != gotRet2 {
 		t.Errorf("(%v, %v) is expected but got (%v, %v)", expectedRet1,
 			expectedRet2, gotRet1, gotRet2)
@@ -89,6 +127,20 @@ func TestSampleStruct1(t *testing.T) {
 		t.Errorf("(%v) is expected but got (%v)", expectedRet, gotRet)
 	}
 	if err != nil {
+		t.Errorf("Error is not expected but got %v", err)
+	}
+}
+
+func TestSampleWrongStruct1(t *testing.T) {
+	var s SampleStruct
+	os.Args = []string{"TestSampleStruct", "Add", "3"}
+	ret, err := Fire(s)
+	expectedNumOut := 0
+	if len(ret) != expectedNumOut {
+		t.Errorf("%d return value expected, got %d", expectedNumOut, len(ret))
+	}
+
+	if err == nil || err.Error() != "Invalid command" {
 		t.Errorf("Error is not expected but got %v", err)
 	}
 }

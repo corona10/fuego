@@ -37,7 +37,7 @@ func (s *Sym) Call() []reflect.Value {
 			s.in = append(s.in, arg)
 		case reflect.Float32:
 			paramValue, _ := strconv.ParseFloat(param, 32)
-			arg := reflect.ValueOf(paramValue)
+			arg := reflect.ValueOf(float32(paramValue))
 			s.in = append(s.in, arg)
 		case reflect.Float64:
 			paramValue, _ := strconv.ParseFloat(param, 64)
@@ -48,10 +48,6 @@ func (s *Sym) Call() []reflect.Value {
 		}
 	}
 	return s.call.Call(s.in)
-}
-
-func (s Sym) GetKind() Fkind {
-	return s.kind
 }
 
 func (s *Sym) GetIn(idx int) reflect.Type {
