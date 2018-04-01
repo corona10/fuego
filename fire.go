@@ -25,9 +25,9 @@ type Config struct {
 // Fire is a function for automatically generating command line interfaces (CLIs)
 // from function and struct
 func Fire(target interface{}, config ...Config) ([]reflect.Value, error) {
-	var info map[string]reflect.Type
+	var info map[string]Sym
 	var conf Config
-	info = make(map[string]reflect.Type)
+	info = make(map[string]Sym)
 	typ := reflect.TypeOf(target)
 	args := os.Args
 
@@ -36,82 +36,46 @@ func Fire(target interface{}, config ...Config) ([]reflect.Value, error) {
 	}
 
 	if typ.Kind() == reflect.Func {
+		var sym Sym
 		funcName := getFunctionName(target)
-		f := reflect.ValueOf(target)
-		numParams := typ.NumIn()
-		in := make([]reflect.Value, numParams)
-		info[funcName] = typ
-
-		if len(args) != numParams+1 {
+		sym.SetKind(Func)
+		sym.SetName(funcName)
+		sym.SetCall(reflect.ValueOf(target))
+		sym.SetParams(args[1:])
+		if len(args) != sym.GetNumOfNeededArgs() {
 			printFunctionHelp(typ, args)
 			return nil, errors.New("Invalid command")
 		}
-
-		params := args[1:]
-
-		// TODO (corona10): Support more features.
-		for idx, param := range params {
-			t := f.Type().In(idx)
-			switch t.Kind() {
-			case reflect.Int:
-				paramValue, _ := strconv.Atoi(param)
-				arg := reflect.ValueOf(paramValue)
-				in[idx] = arg
-			case reflect.Float32:
-				paramValue, _ := strconv.ParseFloat(param, 32)
-				arg := reflect.ValueOf(paramValue)
-				in[idx] = arg
-			case reflect.Float64:
-				paramValue, _ := strconv.ParseFloat(param, 64)
-				arg := reflect.ValueOf(paramValue)
-				in[idx] = arg
-			case reflect.String:
-				in[idx] = reflect.ValueOf(param)
-			}
-		}
-
-		ret := f.Call(in)
-
+		ret := sym.Call()
 		if !conf.PrintReturnValuesOff {
 			printCallResult(ret)
 		}
-
 		return ret, nil
 	} else if typ.Kind() == reflect.Struct {
+
 		for i := 0; i < typ.NumMethod(); i++ {
+			var sym Sym
 			method := typ.Method(i)
-			info[method.Name] = method.Type
+			sym.SetKind(Method)
+			sym.SetName(method.Name)
+			sym.SetCall(reflect.ValueOf(target).MethodByName(method.Name))
+			info[method.Name] = sym
 		}
 
-		if len(args) < 2 || info[args[1]] == nil || len(args[2:]) != info[args[1]].NumIn()-1 {
+		if len(args) < 2 {
 			printMethodHelp(info, args)
 			return nil, errors.New("Invalid command")
 		}
 
-		method := info[args[1]]
-		params := args[2:]
-		in := make([]reflect.Value, len(params))
-		// TODO (corona10): Support more features.
-		for idx, param := range params {
-			t := method.In(idx + 1)
-			switch t.Kind() {
-			case reflect.Int:
-				paramValue, _ := strconv.Atoi(param)
-				arg := reflect.ValueOf(paramValue)
-				in[idx] = arg
-			case reflect.Float32:
-				paramValue, _ := strconv.ParseFloat(param, 32)
-				arg := reflect.ValueOf(paramValue)
-				in[idx] = arg
-			case reflect.Float64:
-				paramValue, _ := strconv.ParseFloat(param, 64)
-				arg := reflect.ValueOf(paramValue)
-				in[idx] = arg
-			case reflect.String:
-				in[idx] = reflect.ValueOf(param)
-			}
+		sym, ok := info[args[1]]
+		if !ok || len(args) != sym.GetNumOfNeededArgs() {
+			printMethodHelp(info, args)
+			return nil, errors.New("Invalid command")
 		}
-		ret := reflect.ValueOf(target).MethodByName(args[1]).Call(in)
+
+		params := args[2:]
+		sym.SetParams(params)
+		ret := sym.Call()
 		if !conf.PrintReturnValuesOff {
 			printCallResult(ret)
 		}
@@ -156,7 +120,7 @@ func printFunctionHelp(info reflect.Type, args []string) {
 	fmt.Printf(msg)
 }
 
-func printMethodHelp(info map[string]reflect.Type, args []string) {
+func printMethodHelp(info map[string]Sym, args []string) {
 	var commands []string
 	file := filepath.Base(args[0])
 	msg := fmt.Sprintf("Usage:%2s%s\n", "", file)
@@ -165,8 +129,8 @@ func printMethodHelp(info map[string]reflect.Type, args []string) {
 		command = append(command, file)
 		command = append(command, key)
 
-		for i := 1; i < value.NumIn(); i++ {
-			command = append(command, value.In(i).String())
+		for i := 0; i < value.GetNumIns(); i++ {
+			command = append(command, value.GetIn(i).String())
 		}
 		commands = append(commands, strings.Join(command, " "))
 	}
