@@ -22,7 +22,7 @@ go get github.com/corona10/fuego
 - More error handling
 - Support more types
 
-[![asciicast](https://asciinema.org/a/173759.png)](https://asciinema.org/a/173759)
+[![asciicast](https://asciinema.org/a/173782.png)](https://asciinema.org/a/173782)
 
 ## [Examples](/_examples)
 
@@ -61,3 +61,4 @@ func main() {
 
 ## Special thanks to
 * [Haeun Kim](https://github.com/haeungun/)
+* [Sebastien Binet](https://github.com/sbinet): The contributor who proposed the name fuego.
