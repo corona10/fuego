@@ -1,20 +1,20 @@
-[![Build Status](https://travis-ci.org/corona10/gofire.svg?branch=master)](https://travis-ci.org/corona10/gofire)
-[![GoDoc](https://godoc.org/github.com/corona10/goimghdr?status.svg)](https://godoc.org/github.com/corona10/gofire)
-[![Go Report Card](https://goreportcard.com/badge/github.com/corona10/gofire)](https://goreportcard.com/report/github.com/corona10/gofire)
+[![Build Status](https://travis-ci.org/corona10/fuego.svg?branch=master)](https://travis-ci.org/corona10/fuego)
+[![GoDoc](https://godoc.org/github.com/corona10/fuego?status.svg)](https://godoc.org/github.com/corona10/fuego)
+[![Go Report Card](https://goreportcard.com/badge/github.com/corona10/fuego)](https://goreportcard.com/report/github.com/corona10/fuego)
 [![License](https://img.shields.io/badge/License-BSD%203--Clause-blue.svg)](https://opensource.org/licenses/BSD-3-Clause)
 
-# gofire
+# fuego
 > Inspired by Google [python-fire](https://github.com/google/python-fire)
 
-gofire is a library for automatically generating command line interfaces (CLIs) from function and struct.
+fuego is a library for automatically generating command line interfaces (CLIs) from function and struct.
 
 ## Features
-* gofire is a simple way to create a CLI in Go.
-* gofire helps with exploring existing code or turning other people's code into a CLI.
+* fuego is a simple way to create a CLI in Go.
+* fuego helps with exploring existing code or turning other people's code into a CLI.
 
 ## Installation
 ```
-go get github.com/corona10/gofire
+go get github.com/corona10/fuego
 ```
 
 ## TODO
@@ -32,7 +32,7 @@ package main
 import (
 	"fmt"
 
-	"github.com/corona10/gofire"
+	"github.com/corona10/fuego"
 )
 
 type Sample struct {
@@ -55,7 +55,7 @@ func (s Sample) HelloWorld() {
 func main() {
 	var s Sample
 	s.Name = "test"
-	gofire.Fire(s)
+	fuego.Fire(s)
 }
 ```
 

@@ -1,8 +1,8 @@
-// Package gofire is a library for automatically generating command line interfaces (CLIs)
+// Package fuego is a library for automatically generating command line interfaces (CLIs)
 // from function and struct.
-package gofire
+package fuego
 
-// Copyright 2018 The gofire Authors. All rights reserved.
+// Copyright 2018 The fuego Authors. All rights reserved.
 // Use of this source code is governed by a BSD-style
 // license that can be found in the LICENSE file.
 
@@ -17,7 +17,7 @@ import (
 	"strings"
 )
 
-// Config is a configuration struct for gofire
+// Config is a configuration struct for fuego
 type Config struct {
 	PrintReturnValuesOff bool
 }

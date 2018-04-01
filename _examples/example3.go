@@ -1,4 +1,4 @@
-// Copyright 2018 The gofire Authors. All rights reserved.
+// Copyright 2018 The fuego Authors. All rights reserved.
 // Use of this source code is governed by a BSD-style
 // license that can be found in the LICENSE file.
 package main
@@ -6,7 +6,7 @@ package main
 import (
 	"fmt"
 
-	"github.com/corona10/gofire"
+	"github.com/corona10/fuego"
 )
 
 func Add(a int, b int) (int, int) {
@@ -15,6 +15,6 @@ func Add(a int, b int) (int, int) {
 }
 
 func main() {
-	config := gofire.Config{PrintReturnValuesOff: true}
-	gofire.Fire(Add, config)
+	config := fuego.Config{PrintReturnValuesOff: true}
+	fuego.Fire(Add, config)
 }
