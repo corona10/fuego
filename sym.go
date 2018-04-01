@@ -5,11 +5,11 @@ import (
 	"strconv"
 )
 
-type FuegoKind int
+type Fkind int
 
 const (
 	// Unknown is a enum value of the unknown FuegoKind.
-	Unknown FuegoKind = iota
+	Unknown Fkind = iota
 	// Func is a enum value of the Func.
 	Func
 	// Method is a enum value of the Go's method.
@@ -19,7 +19,7 @@ const (
 // Sym is a symbol of method/functions
 type Sym struct {
 	name   string
-	kind   FuegoKind
+	kind   Fkind
 	in     []reflect.Value
 	params []string
 	call   reflect.Value
@@ -50,7 +50,7 @@ func (s *Sym) Call() []reflect.Value {
 	return s.call.Call(s.in)
 }
 
-func (s Sym) GetKind() FuegoKind {
+func (s Sym) GetKind() Fkind {
 	return s.kind
 }
 
@@ -65,7 +65,7 @@ func (s *Sym) SetName(name string) {
 	s.name = name
 }
 
-func (s *Sym) SetKind(kind FuegoKind) {
+func (s *Sym) SetKind(kind Fkind) {
 	s.kind = kind
 }
 
