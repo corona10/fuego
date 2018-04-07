@@ -1,6 +1,7 @@
 [![Build Status](https://travis-ci.org/corona10/fuego.svg?branch=master)](https://travis-ci.org/corona10/fuego)
 [![GoDoc](https://godoc.org/github.com/corona10/fuego?status.svg)](https://godoc.org/github.com/corona10/fuego)
 [![Go Report Card](https://goreportcard.com/badge/github.com/corona10/fuego)](https://goreportcard.com/report/github.com/corona10/fuego)
+[![Coverage Status](https://coveralls.io/repos/github/corona10/fuego/badge.svg?branch=master)](https://coveralls.io/github/corona10/fuego?branch=master)
 [![License](https://img.shields.io/badge/License-BSD%203--Clause-blue.svg)](https://opensource.org/licenses/BSD-3-Clause)
 
 # fuego
@@ -23,7 +24,7 @@ go get github.com/corona10/fuego
 - More error handling
 - Support more types
 
-[![asciicast](https://asciinema.org/a/173782.png)](https://asciinema.org/a/173782)
+[![asciicast](https://asciinema.org/a/nSnLXpwctZtQgpNJ4u8zKTYdR.png)](https://asciinema.org/a/nSnLXpwctZtQgpNJ4u8zKTYdR)
 
 ## [Examples](/_examples)
 
