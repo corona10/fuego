@@ -71,7 +71,7 @@ func TestWrongFunc(t *testing.T) {
 		t.Errorf("%d return value expected, got %d", expectedNumOut, len(ret))
 	}
 
-	if err == nil || err.Error() != "Invalid command." {
+	if err == nil || err.Error() != "Invalid command" {
 		t.Errorf("Error is not expected but got %v", err)
 	}
 }
@@ -144,7 +144,7 @@ func TestSampleWrongStruct1(t *testing.T) {
 		t.Errorf("%d return value expected, got %d", expectedNumOut, len(ret))
 	}
 
-	if err == nil || err.Error() != "Invalid command." {
+	if err == nil || err.Error() != "Invalid command" {
 		t.Errorf("Error is not expected but got %v", err)
 	}
 }
@@ -199,7 +199,7 @@ func TestSampleStructWrongCommand(t *testing.T) {
 		t.Errorf("(%v) is expected but got (%v)", nil, ret)
 	}
 
-	if err == nil || err.Error() != "Invalid command." {
+	if err == nil || err.Error() != "Invalid command" {
 		t.Errorf("Error is expected but got %v", err)
 	}
 }

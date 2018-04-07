@@ -56,7 +56,7 @@ func Fire(target interface{}, config ...Config) ([]reflect.Value, error) {
 		sym.SetValid(true)
 		if len(args) != sym.GetNumOfNeededArgs() {
 			printFunctionHelp(sym, args)
-			return nil, errors.New("Invalid command.")
+			return nil, errors.New("Invalid command")
 		}
 		ret := sym.Call()
 		if !conf.PrintReturnValuesOff {
@@ -81,13 +81,13 @@ func Fire(target interface{}, config ...Config) ([]reflect.Value, error) {
 
 		if len(args) < 2 {
 			printMethodHelp(info, args)
-			return nil, errors.New("Invalid command.")
+			return nil, errors.New("Invalid command")
 		}
 
 		sym, ok := info[args[1]]
 		if !ok || len(args) != sym.GetNumOfNeededArgs() {
 			printMethodHelp(info, args)
-			return nil, errors.New("Invalid command.")
+			return nil, errors.New("Invalid command")
 		}
 
 		params := args[2:]
