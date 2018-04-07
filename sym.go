@@ -23,6 +23,8 @@ type Sym struct {
 	in     []reflect.Value
 	params []string
 	call   reflect.Value
+	doc    string
+	valid  bool
 }
 
 func (s *Sym) Call() []reflect.Value {
@@ -50,11 +52,24 @@ func (s *Sym) Call() []reflect.Value {
 	return s.call.Call(s.in)
 }
 
+func (s *Sym) GetDoc() string {
+	return s.doc
+}
+
 func (s *Sym) GetIn(idx int) reflect.Type {
 	return s.call.Type().In(idx)
 }
+
 func (s *Sym) GetNumIns() int {
 	return s.call.Type().NumIn()
+}
+
+func (s *Sym) IsValid() bool {
+	return s.valid
+}
+
+func (s *Sym) SetDoc(doc string) {
+	s.doc = doc
 }
 
 func (s *Sym) SetName(name string) {
@@ -71,6 +86,10 @@ func (s *Sym) SetParams(params []string) {
 
 func (s *Sym) SetCall(call reflect.Value) {
 	s.call = call
+}
+
+func (s *Sym) SetValid(valid bool) {
+	s.valid = valid
 }
 
 func (s Sym) GetNumOfNeededArgs() int {

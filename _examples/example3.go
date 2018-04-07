@@ -9,6 +9,7 @@ import (
 	"github.com/corona10/fuego"
 )
 
+// Test Add function.
 func Add(a int, b int) (int, int) {
 	fmt.Println(a, b)
 	return a + b, a - b

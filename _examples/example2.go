@@ -13,10 +13,12 @@ type Sample struct {
 	Name string
 }
 
+// Add is a method for Add.
 func (s Sample) Add(a, b int) int {
 	return a + b
 }
 
+// Minus is a method for Minus.
 func (s Sample) Minus(a, b int) int {
 	return a - b
 }

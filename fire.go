@@ -9,6 +9,9 @@ package fuego
 import (
 	"errors"
 	"fmt"
+	"go/ast"
+	"go/parser"
+	"go/token"
 	"os"
 	"path/filepath"
 	"reflect"
@@ -25,26 +28,35 @@ type Config struct {
 // Fire is a function for automatically generating command line interfaces (CLIs)
 // from function and struct
 func Fire(target interface{}, config ...Config) ([]reflect.Value, error) {
-	var info map[string]Sym
 	var conf Config
-	info = make(map[string]Sym)
 	typ := reflect.TypeOf(target)
 	args := os.Args
+	_, callerFile, _, _ := runtime.Caller(1)
+	info, err := getASTInfo(callerFile)
+
+	if err != nil {
+		return nil, err
+	}
 
 	if len(config) > 0 {
 		conf = config[0]
 	}
 
 	if typ.Kind() == reflect.Func {
-		var sym Sym
 		funcName := getFunctionName(target)
+		sym, ok := info[funcName]
+		if !ok {
+			msg := fmt.Sprintf("%s should be found from AST information.\n", funcName)
+			panic(msg)
+		}
 		sym.SetKind(Func)
-		sym.SetName(funcName)
 		sym.SetCall(reflect.ValueOf(target))
 		sym.SetParams(args[1:])
+		// TODO(corona10): Fix this, not to check isvalid.
+		sym.SetValid(true)
 		if len(args) != sym.GetNumOfNeededArgs() {
-			printFunctionHelp(typ, args)
-			return nil, errors.New("Invalid command")
+			printFunctionHelp(sym, args)
+			return nil, errors.New("Invalid command.")
 		}
 		ret := sym.Call()
 		if !conf.PrintReturnValuesOff {
@@ -54,23 +66,28 @@ func Fire(target interface{}, config ...Config) ([]reflect.Value, error) {
 	} else if typ.Kind() == reflect.Struct {
 
 		for i := 0; i < typ.NumMethod(); i++ {
-			var sym Sym
 			method := typ.Method(i)
+			sym, ok := info[method.Name]
+			if !ok {
+				msg := fmt.Sprintf("%s should be found from AST information.\n", method.Name)
+				panic(msg)
+			}
 			sym.SetKind(Method)
-			sym.SetName(method.Name)
 			sym.SetCall(reflect.ValueOf(target).MethodByName(method.Name))
+			// TODO(corona10): Fix this, not to check isvalid.
+			sym.SetValid(true)
 			info[method.Name] = sym
 		}
 
 		if len(args) < 2 {
 			printMethodHelp(info, args)
-			return nil, errors.New("Invalid command")
+			return nil, errors.New("Invalid command.")
 		}
 
 		sym, ok := info[args[1]]
 		if !ok || len(args) != sym.GetNumOfNeededArgs() {
 			printMethodHelp(info, args)
-			return nil, errors.New("Invalid command")
+			return nil, errors.New("Invalid command.")
 		}
 
 		params := args[2:]
@@ -109,14 +126,13 @@ func getFunctionName(fn interface{}) string {
 	return funcNames[len(funcNames)-1]
 }
 
-func printFunctionHelp(info reflect.Type, args []string) {
+func printFunctionHelp(info Sym, args []string) {
 	var params []string
 	file := filepath.Base(args[0])
-	for i := 0; i < info.NumIn(); i++ {
-		params = append(params, info.In(i).String())
+	for i := 0; i < info.GetNumIns(); i++ {
+		params = append(params, info.GetIn(i).String())
 	}
-
-	msg := fmt.Sprintf("Usage of %s:\n%s %s\n", file, file, strings.Join(params, " "))
+	msg := fmt.Sprintf("Usage of %s:\n%s %s -> %s", file, file, strings.Join(params, " "), info.GetDoc())
 	fmt.Printf(msg)
 }
 
@@ -125,17 +141,42 @@ func printMethodHelp(info map[string]Sym, args []string) {
 	file := filepath.Base(args[0])
 	msg := fmt.Sprintf("Usage of %s:\n", file)
 	for key, value := range info {
+		if !value.IsValid() {
+			continue
+		}
 		var command []string
 		command = append(command, file)
 		command = append(command, key)
-
 		for i := 0; i < value.GetNumIns(); i++ {
 			command = append(command, value.GetIn(i).String())
 		}
+		command = append(command, "->")
+		command = append(command, value.GetDoc())
 		commands = append(commands, strings.Join(command, " "))
 	}
 
-	showCommands := strings.Join(commands, "\n")
-	msg = fmt.Sprintf("%s%s\n", msg, showCommands)
+	showCommands := strings.Join(commands, "")
+	msg = fmt.Sprintf("%s%s", msg, showCommands)
 	fmt.Printf(msg)
+}
+
+func getASTInfo(filePath string) (map[string]Sym, error) {
+	info := make(map[string]Sym)
+	fset := token.NewFileSet()
+	node, err := parser.ParseFile(fset, filePath, nil, parser.ParseComments)
+	for _, f := range node.Decls {
+		fn, ok := f.(*ast.FuncDecl)
+		if !ok {
+			continue
+		}
+		var sym Sym
+		sym.SetName(fn.Name.Name)
+		if fn.Doc.Text() != "" {
+			sym.SetDoc(fn.Doc.Text())
+		} else {
+			sym.SetDoc("No document existed.\n")
+		}
+		info[fn.Name.Name] = sym
+	}
+	return info, err
 }

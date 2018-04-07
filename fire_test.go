@@ -10,6 +10,7 @@ import (
 	"testing"
 )
 
+// Func1 is a test function for Function.
 func Func1(a, b int) (int, int) {
 	return a + b, a - b
 }
@@ -18,6 +19,7 @@ func Func2(a, b float64) (float64, float64) {
 	return a + b, a - b
 }
 
+// Func3 is a test function for Function.
 func Func3(a, b float32) (float32, float32) {
 	return a + b, a - b
 }
@@ -26,10 +28,12 @@ type SampleStruct struct {
 	Name string
 }
 
+// Test Add Method
 func (s SampleStruct) Add(a, b int) int {
 	return a + b
 }
 
+// Test Minus Method.
 func (s SampleStruct) Minus(a, b int) int {
 	return a - b
 }
@@ -67,7 +71,7 @@ func TestWrongFunc(t *testing.T) {
 		t.Errorf("%d return value expected, got %d", expectedNumOut, len(ret))
 	}
 
-	if err == nil || err.Error() != "Invalid command" {
+	if err == nil || err.Error() != "Invalid command." {
 		t.Errorf("Error is not expected but got %v", err)
 	}
 }
@@ -140,7 +144,7 @@ func TestSampleWrongStruct1(t *testing.T) {
 		t.Errorf("%d return value expected, got %d", expectedNumOut, len(ret))
 	}
 
-	if err == nil || err.Error() != "Invalid command" {
+	if err == nil || err.Error() != "Invalid command." {
 		t.Errorf("Error is not expected but got %v", err)
 	}
 }
@@ -195,7 +199,7 @@ func TestSampleStructWrongCommand(t *testing.T) {
 		t.Errorf("(%v) is expected but got (%v)", nil, ret)
 	}
 
-	if err == nil || err.Error() != "Invalid command" {
+	if err == nil || err.Error() != "Invalid command." {
 		t.Errorf("Error is expected but got %v", err)
 	}
 }
