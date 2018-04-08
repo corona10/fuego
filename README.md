@@ -11,7 +11,7 @@ fuego is a library for automatically generating command line interfaces (CLIs) f
 
 ## Features
 * fuego is a simple way to create a CLI in Go.
-* fuego helps with exploring existing code or turning other people's code into a CLI. [[1]](_example/example4.go)
+* fuego helps with exploring existing code or turning other people's code into a CLI. [[1]](_examples/example4.go)
 * fuego shows documentation of each method or functions for help.
 
 ## Installation
