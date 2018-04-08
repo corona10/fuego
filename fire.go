@@ -46,8 +46,8 @@ func Fire(target interface{}, config ...Config) ([]reflect.Value, error) {
 		funcName := getFunctionName(target)
 		sym, ok := info[funcName]
 		if !ok {
-			msg := fmt.Sprintf("%s should be found from AST information.\n", funcName)
-			panic(msg)
+			msg := fmt.Sprintf("Documentation of %s should be found from AST information.\n", funcName)
+			sym.SetDoc(msg)
 		}
 		sym.SetKind(Func)
 		sym.SetCall(reflect.ValueOf(target))
@@ -69,8 +69,8 @@ func Fire(target interface{}, config ...Config) ([]reflect.Value, error) {
 			method := typ.Method(i)
 			sym, ok := info[method.Name]
 			if !ok {
-				msg := fmt.Sprintf("%s should be found from AST information.\n", method.Name)
-				panic(msg)
+				msg := fmt.Sprintf("Documentation of %s should be found from AST information.\n", method.Name)
+				sym.SetDoc(msg)
 			}
 			sym.SetKind(Method)
 			sym.SetCall(reflect.ValueOf(target).MethodByName(method.Name))
