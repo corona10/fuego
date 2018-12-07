@@ -130,7 +130,8 @@ func printFunctionHelp(info Sym, args []string) {
 	var params []string
 	file := filepath.Base(args[0])
 	for i := 0; i < info.GetNumIns(); i++ {
-		params = append(params, info.GetIn(i).String())
+		param := fmt.Sprintf("<:%s>", info.GetIn(i).String())
+		params = append(params, param)
 	}
 	msg := fmt.Sprintf("Usage of %s:\n%s %s -> %s", file, file, strings.Join(params, " "), info.GetDoc())
 	fmt.Printf(msg)
@@ -148,7 +149,8 @@ func printMethodHelp(info map[string]Sym, args []string) {
 		command = append(command, file)
 		command = append(command, key)
 		for i := 0; i < value.GetNumIns(); i++ {
-			command = append(command, value.GetIn(i).String())
+			param := fmt.Sprintf("<:%s>", value.GetIn(i).String())
+			command = append(command, param)
 		}
 		command = append(command, "->")
 		command = append(command, value.GetDoc())
