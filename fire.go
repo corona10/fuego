@@ -150,6 +150,8 @@ func printMethodHelp(info map[string]Sym, args []string) {
 		var command []string
 		command = append(command, file)
 		command = append(command, key)
+		command = append(command, "/")
+		command = append(command, strings.ToLower(key))
 		for i := 0; i < value.GetNumIns(); i++ {
 			param := fmt.Sprintf("<:%s>", value.GetIn(i).String())
 			command = append(command, param)
