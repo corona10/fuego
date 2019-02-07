@@ -84,7 +84,9 @@ func Fire(target interface{}, config ...Config) ([]reflect.Value, error) {
 			return nil, errors.New("Invalid command")
 		}
 
-		sym, ok := info[args[1]]
+		// add support for lowcase methodName
+		methodTitleName := strings.Title(args[1])
+		sym, ok := info[methodTitleName]
 		if !ok || len(args) != sym.GetNumOfNeededArgs() {
 			printMethodHelp(info, args)
 			return nil, errors.New("Invalid command")
